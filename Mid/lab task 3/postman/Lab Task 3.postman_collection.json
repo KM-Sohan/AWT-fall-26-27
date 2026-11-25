@@ -1,0 +1,63 @@
+{
+  "info": {
+    "_postman_id": "7d93ee15-c717-4ed2-9af1-5b39b4ef3003",
+    "name": "NestJS Lab Task 3 - User Registration Validation",
+    "description": "Five required validation requests from the lab task.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5001" }
+  ],
+  "item": [
+    {
+      "name": "1. Valid registration (201)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"fullName\": \"Rahim Ahmed\",\n  \"email\": \"rahim@gmail.com\",\n  \"password\": \"Rahim@123\",\n  \"age\": 22,\n  \"phone\": \"01712345678\",\n  \"accountType\": \"student\",\n  \"address\": \"Dhaka, Bangladesh\"\n}", "options": { "raw": { "language": "json" } } },
+        "url": { "raw": "{{baseUrl}}/users/register", "host": ["{{baseUrl}}"], "path": ["users", "register"] }
+      },
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('Returns 201 Created', () => pm.response.to.have.status(201));", "pm.test('Password is not returned', () => pm.expect(pm.response.text()).not.to.include('Rahim@123'));" ] } }]
+    },
+    {
+      "name": "2. Invalid email (400)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"fullName\": \"Rahim Ahmed\",\n  \"email\": \"not-an-email\",\n  \"password\": \"Rahim@123\",\n  \"age\": 22,\n  \"phone\": \"01712345678\",\n  \"accountType\": \"student\",\n  \"address\": \"Dhaka, Bangladesh\"\n}", "options": { "raw": { "language": "json" } } },
+        "url": { "raw": "{{baseUrl}}/users/register", "host": ["{{baseUrl}}"], "path": ["users", "register"] }
+      },
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('Returns 400 Bad Request', () => pm.response.to.have.status(400));"] } }]
+    },
+    {
+      "name": "3. Weak password (400)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"fullName\": \"Rahim Ahmed\",\n  \"email\": \"rahim@gmail.com\",\n  \"password\": \"12345\",\n  \"age\": 22,\n  \"phone\": \"01712345678\",\n  \"accountType\": \"student\",\n  \"address\": \"Dhaka, Bangladesh\"\n}", "options": { "raw": { "language": "json" } } },
+        "url": { "raw": "{{baseUrl}}/users/register", "host": ["{{baseUrl}}"], "path": ["users", "register"] }
+      },
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('Returns 400 Bad Request', () => pm.response.to.have.status(400));"] } }]
+    },
+    {
+      "name": "4. Age below 18 (400)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"fullName\": \"Rahim Ahmed\",\n  \"email\": \"rahim@gmail.com\",\n  \"password\": \"Rahim@123\",\n  \"age\": 17,\n  \"phone\": \"01712345678\",\n  \"accountType\": \"student\",\n  \"address\": \"Dhaka, Bangladesh\"\n}", "options": { "raw": { "language": "json" } } },
+        "url": { "raw": "{{baseUrl}}/users/register", "host": ["{{baseUrl}}"], "path": ["users", "register"] }
+      },
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('Returns 400 Bad Request', () => pm.response.to.have.status(400));"] } }]
+    },
+    {
+      "name": "5. Unexpected isAdmin property (400)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"fullName\": \"Rahim Ahmed\",\n  \"email\": \"rahim@gmail.com\",\n  \"password\": \"Rahim@123\",\n  \"age\": 22,\n  \"phone\": \"01712345678\",\n  \"accountType\": \"student\",\n  \"address\": \"Dhaka, Bangladesh\",\n  \"isAdmin\": true\n}", "options": { "raw": { "language": "json" } } },
+        "url": { "raw": "{{baseUrl}}/users/register", "host": ["{{baseUrl}}"], "path": ["users", "register"] }
+      },
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('Returns 400 Bad Request', () => pm.response.to.have.status(400));"] } }]
+    }
+  ]
+}
